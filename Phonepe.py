@@ -699,8 +699,7 @@ def GeoIndiaMap(df):
                     fitbounds="locations"
                     )
     # Display the map in Streamlit
-    #st.plotly_chart(fig)
-    col1.plotly_chart(fig.show())
+    st.plotly_chart(fig)
 
 def GeoIndiaMap_User(df1):
     fig = px.choropleth_mapbox(
@@ -730,16 +729,15 @@ def GeoIndiaMap_User(df1):
                     fitbounds="locations"
                     )
     # Display the map in Streamlit
-    #st.plotly_chart(fig)
-
+    st.plotly_chart(fig)
 
 def BarTransaction(df2):
     fig = px.bar(df2, x="Transaction_type", y="Transaction_count",color="Transaction_count",
-                 color_continuous_scale='Blues'
-                 #, title="Transaction Type Year-Quarter transaction count"
+                  color_continuous_scale='Blues',
+                  title="Transaction Type Year-Quarter transaction count"
                  )
     fig.update_yaxes(tickformat=',.0f', tickprefix='₹')
-    col2.plotly_chart(fig.show())
+    fig.show()
 
 def PieDistrict(df3):
     fig = go.Figure(data=[go.Pie(labels=df3['District'], values=df3['Transaction_count'])])
@@ -748,8 +746,8 @@ def PieDistrict(df3):
                       marker=dict(colors=pie_colors, line=dict(color='#FFFFFF', width=2)),
                       texttemplate="%{label}: %{value:.2f}₹ cr"
                       )
-    #fig.update_layout(title='Pie Chart for District Transactions')
-    col3.plotly_chart(fig.show())
+    fig.update_layout(title='Pie Chart for District Transactions')
+    fig.show()
 
 def PiePincode(df4):
     fig = go.Figure(data=[go.Pie(labels=df4['Pincode'], values=df4['Transaction_count'])])
@@ -758,8 +756,16 @@ def PiePincode(df4):
                       marker=dict(colors=pie_colors, line=dict(color='#FFFFFF', width=2)),
                       texttemplate="%{label}: %{value:.2f}₹ cr"
                       )
-    #fig.update_layout(title=f'Pie Chart for Pincode Transactions')
-    col4.plotly_chart(fig.show())
+    fig.update_layout(title=f'Pie Chart for Pincode Transactions')
+    fig.show()
+
+def BarTransaction_User(df5):
+    fig = px.bar(df5, x="appOpens", y="RegisteredUsers",color="RegisteredUsers",
+                 color_continuous_scale='Blues',
+                 title="Registered PhonePe users - appOpens"
+                 )
+    #fig.update_yaxes(tickformat=',.0f', tickprefix='₹')
+    fig.show()
 
 #########################################################################################################
 st.write("Phone Transactions Analysis")
@@ -812,7 +818,7 @@ if(st.button("PhonePe Transaction State wise")):
                 GeoIndiaMap(Agg_Txn_Cntry_State1)
 
             elif(selected_state ==  'All India' and selected_year != 'None' and selected_quarter !=  'None'):
-                 st.write("All Data-Geo India-State Map with Year and Quarter")
+                 st.write("Year-Quarter wise")
                  no_quarter=str(selected_quarter.strip('Q'))
                  st.write(no_quarter)
 
@@ -891,14 +897,17 @@ if(st.button("PhonePe Transaction State wise")):
                 filter_Agg_Txn_Cntry_State1 = Agg_Txn_Cntry_State2[(Agg_Txn_Cntry_State2['State'] == selected_state) &
                                                                    (Agg_Txn_Cntry_State2['Year'] == selected_year) &
                                                                    (Agg_Txn_Cntry_State2['Quarter'] == no_quarter)]
+
                 filter_Agg_Txn_Cntry_State1 = filter_Agg_Txn_Cntry_State1.groupby(
                     ["State","Year", "Quarter", "Transaction_type"]).agg({"Transaction_count": "sum"}).reset_index()
 
                 Dict_Txn_cnt=Dict_Txn_cnt()
+
                 filter_Dict_Txn_cnt=Dict_Txn_cnt[(Dict_Txn_cnt['State'] == selected_state) &
                                                    (Dict_Txn_cnt['Year'] == selected_year) &
                                                    (Dict_Txn_cnt['Quarter'] == no_quarter)]
                 Pincode_Txn_cnt=Pincode_Txn_cnt()
+
                 filter_Pincode_Txn_cnt = Pincode_Txn_cnt[(Pincode_Txn_cnt['State'] == selected_state) &
                                                    (Pincode_Txn_cnt['Year'] == selected_year) &
                                                    (Pincode_Txn_cnt['Quarter'] == no_quarter)]
@@ -927,5 +936,10 @@ if(st.button("PhonePe Transaction State wise")):
                 filter_User_Txn_Cntry_State = User_Txn_Cntry_State[(User_Txn_Cntry_State['Year'] == selected_year) &
                                                                   (User_Txn_Cntry_State['Quarter'] == no_quarter)]
 
+                filter_User_Txn_Cntry_State_sum= filter_User_Txn_Cntry_State.groupby(['Year','Quarter']).agg({'RegisteredUsers':'sum','appOpens':'sum'}).reset_index()
+
                 st.write(filter_User_Txn_Cntry_State)
+                st.write(filter_User_Txn_Cntry_State_sum)
+
                 GeoIndiaMap_User(filter_User_Txn_Cntry_State)
+                BarTransaction_User(filter_User_Txn_Cntry_State_sum)
