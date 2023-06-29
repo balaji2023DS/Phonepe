@@ -640,7 +640,7 @@ def Dict_Txn_cnt():
             database="data_science")
         # print(mysql_db_connector)
         mysql_cursor = mysql_db_connector.cursor()
-        sql = '''select State,Year,Quarter,District,round((Transaction_count/10000000),2) as Transaction_count  
+        sql = '''select State,Year,Quarter,District,round((Transaction_count/100000),2) as Transaction_count  
                  from Top_Txn_Cntry_State_Dist order by Transaction_count desc'''
         mysql_cursor.execute(sql)
         rows = mysql_cursor.fetchall()
@@ -659,7 +659,7 @@ def Pincode_Txn_cnt():
             database="data_science")
         # print(mysql_db_connector)
         mysql_cursor = mysql_db_connector.cursor()
-        sql = '''select State,Year,Quarter,Pincode,round((Pincode_Transaction_count/10000000),2) as Transaction_count
+        sql = '''select State,Year,Quarter,Pincode,round((Pincode_Transaction_count/100000),2) as Transaction_count
                  from Top_Txn_Cntry_State_Pincode order by Pincode_Transaction_count desc'''
         mysql_cursor.execute(sql)
         rows = mysql_cursor.fetchall()
@@ -678,7 +678,7 @@ def Dict_Txn_cnt_User():
             database="data_science")
         # print(mysql_db_connector)
         mysql_cursor = mysql_db_connector.cursor()
-        sql = '''select State,Year,Quarter,District,(Registeredusers/100000) as Registeredusers
+        sql = '''select State,Year,Quarter,District,round((Registeredusers/100000),2) as Registeredusers
                 from Top_User_Cntry_State_Dist order by Year,Quarter desc'''
         mysql_cursor.execute(sql)
         rows = mysql_cursor.fetchall()
@@ -697,7 +697,7 @@ def Pincode_Txn_cnt_User():
             database="data_science")
         # print(mysql_db_connector)
         mysql_cursor = mysql_db_connector.cursor()
-        sql = '''select State,Year,Quarter,Pincode,(Pincode_Registeredusers/100000) as Registeredusers 
+        sql = '''select State,Year,Quarter,Pincode,round((Pincode_Registeredusers/100000),2) as Registeredusers 
                 from Top_User_Cntry_State_Pincode order by Year,Quarter desc'''
         mysql_cursor.execute(sql)
         rows = mysql_cursor.fetchall()
@@ -783,7 +783,7 @@ def PieDistrict(df3):
     pie_colors = pc.qualitative.Plotly
     fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=12,
                       marker=dict(colors=pie_colors, line=dict(color='#FFFFFF', width=2)),
-                      texttemplate="%{label}: %{value:.2f}₹ cr"
+                      texttemplate="%{label}: ₹ %{value:.2f} lakh"
                       )
     fig.update_layout(title='Pie Chart for District Transactions')
     fig.show()
@@ -793,7 +793,7 @@ def PiePincode(df4):
     pie_colors = pc.qualitative.Plotly
     fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=12,
                       marker=dict(colors=pie_colors, line=dict(color='#FFFFFF', width=2)),
-                      texttemplate="%{label}: %{value:.2f}₹ cr"
+                      texttemplate="%{label}: ₹ %{value:.2f} lakh"
                       )
     fig.update_layout(title=f'Pie Chart for Pincode Transactions')
     fig.show()
@@ -811,7 +811,7 @@ def PieDistrict_User(df6):
     pie_colors = pc.qualitative.Plotly
     fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=12,
                       marker=dict(colors=pie_colors, line=dict(color='#FFFFFF', width=2)),
-                      texttemplate="%{label}: %{value:.2f}₹ lakh"
+                      texttemplate="%{label}: ₹ %{value:.2f} lakh"
                       )
     fig.update_layout(title='Pie Chart for District Registeredusers')
     fig.show()
@@ -821,7 +821,7 @@ def PiePincode_User(df7):
     pie_colors = pc.qualitative.Plotly
     fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=12,
                       marker=dict(colors=pie_colors, line=dict(color='#FFFFFF', width=2)),
-                      texttemplate="%{label}: %{value:.2f}₹ lakh"
+                      texttemplate="%{label}: ₹ %{value:.2f} lakh"
                       )
     fig.update_layout(title=f'Pie Chart for Pincode Registeredusers')
     fig.show()
@@ -1035,3 +1035,5 @@ if(st.button("PhonePe Transaction State wise")):
                 GeoIndiaMap_User(filter_User_Txn_Cntry_State)
                 PieDistrict_User(filter_Dict_Txn_cnt_User)
                 PiePincode_User(filter_Pincode_Txn_cnt_User)
+
+                #BarTransaction_User(filter_User_Txn_Cntry_State_sum)
