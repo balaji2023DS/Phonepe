@@ -1035,5 +1035,4 @@ if(st.button("PhonePe Transaction State wise")):
                 GeoIndiaMap_User(filter_User_Txn_Cntry_State)
                 PieDistrict_User(filter_Dict_Txn_cnt_User)
                 PiePincode_User(filter_Pincode_Txn_cnt_User)
-
-                #BarTransaction_User(filter_User_Txn_Cntry_State_sum)
+                
