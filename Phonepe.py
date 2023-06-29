@@ -671,6 +671,45 @@ def Pincode_Txn_cnt():
     except:
         mysql_db_connector.close()
 
+def Dict_Txn_cnt_User():
+    try:
+        mysql_db_connector = mysql.connector.connect(
+            host="localhost", user="root", password="mysql@123", auth_plugin='mysql_native_password',
+            database="data_science")
+        # print(mysql_db_connector)
+        mysql_cursor = mysql_db_connector.cursor()
+        sql = '''select State,Year,Quarter,District,(Registeredusers/100000) as Registeredusers
+                from Top_User_Cntry_State_Dist order by Year,Quarter desc'''
+        mysql_cursor.execute(sql)
+        rows = mysql_cursor.fetchall()
+        Dict_Txn_cnt_user = pd.DataFrame(rows, columns=['State','Year','Quarter','District', 'Registeredusers'])
+        mysql_db_connector.close()
+
+        return Dict_Txn_cnt_user
+
+    except:
+        mysql_db_connector.close()
+
+def Pincode_Txn_cnt_User():
+    try:
+        mysql_db_connector = mysql.connector.connect(
+            host="localhost", user="root", password="mysql@123", auth_plugin='mysql_native_password',
+            database="data_science")
+        # print(mysql_db_connector)
+        mysql_cursor = mysql_db_connector.cursor()
+        sql = '''select State,Year,Quarter,Pincode,(Pincode_Registeredusers/100000) as Registeredusers 
+                from Top_User_Cntry_State_Pincode order by Year,Quarter desc'''
+        mysql_cursor.execute(sql)
+        rows = mysql_cursor.fetchall()
+        Pincode_Txn_cnt_user = pd.DataFrame(rows, columns=['State','Year','Quarter','Pincode', 'Registeredusers'])
+        mysql_db_connector.close()
+
+        return Pincode_Txn_cnt_user
+
+    except:
+        mysql_db_connector.close()
+
+
 def GeoIndiaMap(df):
     fig = px.choropleth_mapbox(
         df,
@@ -765,6 +804,26 @@ def BarTransaction_User(df5):
                  title="Registered PhonePe users - appOpens"
                  )
     #fig.update_yaxes(tickformat=',.0f', tickprefix='₹')
+    fig.show()
+
+def PieDistrict_User(df6):
+    fig = go.Figure(data=[go.Pie(labels=df6['District'], values=df6['Registeredusers'])])
+    pie_colors = pc.qualitative.Plotly
+    fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=12,
+                      marker=dict(colors=pie_colors, line=dict(color='#FFFFFF', width=2)),
+                      texttemplate="%{label}: %{value:.2f}₹ lakh"
+                      )
+    fig.update_layout(title='Pie Chart for District Registeredusers')
+    fig.show()
+
+def PiePincode_User(df7):
+    fig = go.Figure(data=[go.Pie(labels=df7['Pincode'], values=df7['Registeredusers'])])
+    pie_colors = pc.qualitative.Plotly
+    fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=12,
+                      marker=dict(colors=pie_colors, line=dict(color='#FFFFFF', width=2)),
+                      texttemplate="%{label}: %{value:.2f}₹ lakh"
+                      )
+    fig.update_layout(title=f'Pie Chart for Pincode Registeredusers')
     fig.show()
 
 #########################################################################################################
@@ -918,13 +977,13 @@ if(st.button("PhonePe Transaction State wise")):
                 PiePincode(filter_Pincode_Txn_cnt)
 
     else:
-            User_Txn_Cntry_State = User_Txn_Cntry_State1()
             st.write(selected_state)
             st.write(selected_year)
             st.write(selected_quarter)
 
             # Filter the DataFrame based on the selected option
             if (selected_state == 'All India' and selected_year == 'None' and selected_quarter == 'None'):
+                User_Txn_Cntry_State = User_Txn_Cntry_State1()
                 st.write("All Data-Geo India-State Map")
                 st.write(User_Txn_Cntry_State)
                 GeoIndiaMap_User(User_Txn_Cntry_State)
@@ -933,6 +992,7 @@ if(st.button("PhonePe Transaction State wise")):
                 st.write("All Data-Geo India-State Map with Year and Quarter")
                 no_quarter = str(selected_quarter.strip('Q'))
                 st.write(no_quarter)
+                User_Txn_Cntry_State = User_Txn_Cntry_State1()
                 filter_User_Txn_Cntry_State = User_Txn_Cntry_State[(User_Txn_Cntry_State['Year'] == selected_year) &
                                                                   (User_Txn_Cntry_State['Quarter'] == no_quarter)]
 
@@ -943,3 +1003,35 @@ if(st.button("PhonePe Transaction State wise")):
 
                 GeoIndiaMap_User(filter_User_Txn_Cntry_State)
                 BarTransaction_User(filter_User_Txn_Cntry_State_sum)
+
+            elif(selected_state != 'All India' and selected_year != 'None' and selected_quarter != 'None'):
+
+                st.write("All Data-Geo India-State Map with Year and Quarter")
+                no_quarter = str(selected_quarter.strip('Q'))
+                st.write(no_quarter)
+                User_Txn_Cntry_State = User_Txn_Cntry_State1()
+                filter_User_Txn_Cntry_State = User_Txn_Cntry_State[(User_Txn_Cntry_State['State'] == selected_state) &
+                                                                   (User_Txn_Cntry_State['Year'] == selected_year) &
+                                                                   (User_Txn_Cntry_State['Quarter'] == no_quarter)
+                                                                   ]
+
+                filter_User_Txn_Cntry_State_sum = filter_User_Txn_Cntry_State.groupby(['State','Year', 'Quarter']).agg({'RegisteredUsers': 'sum', 'appOpens': 'sum'}).reset_index()
+
+                Dict_Txn_cnt_User1=Dict_Txn_cnt_User()
+                filter_Dict_Txn_cnt_User = Dict_Txn_cnt_User1[(Dict_Txn_cnt_User1['State'] == selected_state) &
+                                                             (Dict_Txn_cnt_User1['Year'] == selected_year) &
+                                                             (Dict_Txn_cnt_User1['Quarter'] == no_quarter)]
+                Pincode_Txn_cnt_User1=Pincode_Txn_cnt_User()
+                filter_Pincode_Txn_cnt_User = Pincode_Txn_cnt_User1[(Pincode_Txn_cnt_User1['State'] == selected_state) &
+                                                                (Pincode_Txn_cnt_User1['Year'] == selected_year) &
+                                                                (Pincode_Txn_cnt_User1['Quarter'] == no_quarter)]
+
+
+                # st.write(filter_User_Txn_Cntry_State)
+                # st.write(filter_User_Txn_Cntry_State_sum)
+                # st.write(filter_Dict_Txn_cnt_User)
+                # st.write(filter_Pincode_Txn_cnt_User)
+
+                GeoIndiaMap_User(filter_User_Txn_Cntry_State)
+                PieDistrict_User(filter_Dict_Txn_cnt_User)
+                PiePincode_User(filter_Pincode_Txn_cnt_User)
