@@ -583,8 +583,8 @@ def Agg_Txn_Cntry_States1():
             Agg_Txn_Cntry_State1['Avg. transaction value'] = Agg_Txn_Cntry_State1['Transaction_amount'] * 10000000 / \
                                                              Agg_Txn_Cntry_State1['Transaction_count']
             # print(Agg_Txn_Cntry_State1.to_string())
-            Agg_Txn_Cntry_State2 = Agg_Txn_Cntry_State.groupby(['State', 'Year', 'Quarter', 'Transaction_type']).agg(
-                {'Transaction_count': 'sum'}).reset_index()
+            #Agg_Txn_Cntry_State2 = Agg_Txn_Cntry_State.groupby(['State', 'Year', 'Quarter', 'Transaction_type']).agg(
+            #    {'Transaction_count': 'sum'}).reset_index()
             # print(Agg_Txn_Cntry_State2.to_string())
             mysql_db_connector.close()
             return Agg_Txn_Cntry_State1
@@ -592,7 +592,7 @@ def Agg_Txn_Cntry_States1():
         except:
             mysql_db_connector.close()
 
-def Agg_Txn_Cntry_State2():
+def Agg_Txn_Cntry_States2():
     try:
         mysql_db_connector = mysql.connector.connect(
             host="localhost", user="root", password="mysql@123", auth_plugin='mysql_native_password',
@@ -614,6 +614,7 @@ def Agg_Txn_Cntry_State2():
 
     except:
         mysql_db_connector.close()
+
 def User_Txn_Cntry_State1():
     try:
         mysql_db_connector = mysql.connector.connect(
@@ -633,7 +634,7 @@ def User_Txn_Cntry_State1():
     except:
         mysql_db_connector.close()
 
-def Dict_Txn_cnt():
+def Dict_Txn_cnts():
     try:
         mysql_db_connector = mysql.connector.connect(
             host="localhost", user="root", password="mysql@123", auth_plugin='mysql_native_password',
@@ -652,7 +653,7 @@ def Dict_Txn_cnt():
     except:
         mysql_db_connector.close()
 
-def Pincode_Txn_cnt():
+def Pincode_Txn_cnts():
     try:
         mysql_db_connector = mysql.connector.connect(
             host="localhost", user="root", password="mysql@123", auth_plugin='mysql_native_password',
@@ -776,7 +777,8 @@ def BarTransaction(df2):
                   title="Transaction Type Year-Quarter transaction count"
                  )
     fig.update_yaxes(tickformat=',.0f', tickprefix='₹')
-    fig.show()
+    st.plotly_chart(fig)
+    #fig.show()
 
 def PieDistrict(df3):
     fig = go.Figure(data=[go.Pie(labels=df3['District'], values=df3['Transaction_count'])])
@@ -786,7 +788,8 @@ def PieDistrict(df3):
                       texttemplate="%{label}: ₹ %{value:.2f} lakh"
                       )
     fig.update_layout(title='Pie Chart for District Transactions')
-    fig.show()
+    st.plotly_chart(fig)
+    #fig.show()
 
 def PiePincode(df4):
     fig = go.Figure(data=[go.Pie(labels=df4['Pincode'], values=df4['Transaction_count'])])
@@ -796,7 +799,8 @@ def PiePincode(df4):
                       texttemplate="%{label}: ₹ %{value:.2f} lakh"
                       )
     fig.update_layout(title=f'Pie Chart for Pincode Transactions')
-    fig.show()
+    #fig.show()
+    st.plotly_chart(fig)
 
 def BarTransaction_User(df5):
     fig = px.bar(df5, x="appOpens", y="RegisteredUsers",color="RegisteredUsers",
@@ -804,8 +808,8 @@ def BarTransaction_User(df5):
                  title="Registered PhonePe users - appOpens"
                  )
     #fig.update_yaxes(tickformat=',.0f', tickprefix='₹')
-    fig.show()
-
+    #fig.show()
+    st.plotly_chart(fig)
 def PieDistrict_User(df6):
     fig = go.Figure(data=[go.Pie(labels=df6['District'], values=df6['Registeredusers'])])
     pie_colors = pc.qualitative.Plotly
@@ -814,7 +818,8 @@ def PieDistrict_User(df6):
                       texttemplate="%{label}: ₹ %{value:.2f} lakh"
                       )
     fig.update_layout(title='Pie Chart for District Registeredusers')
-    fig.show()
+    #fig.show()
+    st.plotly_chart(fig)
 
 def PiePincode_User(df7):
     fig = go.Figure(data=[go.Pie(labels=df7['Pincode'], values=df7['Registeredusers'])])
@@ -824,215 +829,262 @@ def PiePincode_User(df7):
                       texttemplate="%{label}: ₹ %{value:.2f} lakh"
                       )
     fig.update_layout(title=f'Pie Chart for Pincode Registeredusers')
-    fig.show()
+    #fig.show()
+    st.plotly_chart(fig)
 
 #########################################################################################################
-st.write("Phone Transactions Analysis")
-if (st.button(" Clone the data from Github to Local")):
-        #Phonepe_Clone()
-        st.write("Clone activity completed")
+def main():
+    st.write("Phone Transactions Analysis")
+    if (st.button(" Clone the data from Github to Local")):
+            #Phonepe_Clone()
+            st.write("Clone activity completed")
 
-if (st.button("Transform the data from Local to Mysql")):
-        # Agg_Txn_Cntry_State()
-        # Agg_User_Cntry_State()
-        # Map_Txn_Cntry_State()
-        # Map_User_Cntry_State()
-        # Top_Txn_Cntry_State_Distrcit()
-        # Top_Txn_Cntry_State_Pincode()
-        # Top_user_Cntry_State_District()
-        # Top_User_Cntry_State_Pincode()
-        st.write("Data Transformation Completed")
+    if (st.button("Transform the data from Local to Mysql")):
+            # Agg_Txn_Cntry_State()
+            # Agg_User_Cntry_State()
+            # Map_Txn_Cntry_State()
+            # Map_User_Cntry_State()
+            # Top_Txn_Cntry_State_Distrcit()
+            # Top_Txn_Cntry_State_Pincode()
+            # Top_user_Cntry_State_District()
+            # Top_User_Cntry_State_Pincode()
+            st.write("Data Transformation Completed")
 
-# Define the available options for the dropdown
-Type = ['Transactions', 'Users']
-selected_Type = st.selectbox('Type', Type)
+    # Define the available options for the dropdown
+    Type = ['Transactions', 'Users']
+    selected_Type = st.selectbox('Type', Type)
 
-State = ['All India','Arunachal Pradesh', 'Assam', 'Chandigarh', 'Karnataka', 'Manipur', 'Meghalaya',
-         'Mizoram', 'Nagaland', 'Punjab', 'Rajasthan', 'Sikkim', 'Tripura', 'Uttarakhand', 'Telangana', 'Bihar',
-         'Kerala', 'Madhya Pradesh', 'Andaman & Nicobar', 'Gujarat', 'Lakshadweep', 'Odisha',
-         'Dadra and Nagar Haveli and Daman and Diu', 'Ladakh', 'Jammu & Kashmir', 'Chhattisgarh', 'Delhi', 'Goa',
-         'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Tamil Nadu', 'Uttar Pradesh', 'West Bengal',
-         'Andhra Pradesh', 'Puduchery', 'Maharashtra']
+    State = ['All India','Arunachal Pradesh', 'Assam', 'Chandigarh', 'Karnataka', 'Manipur', 'Meghalaya',
+             'Mizoram', 'Nagaland', 'Punjab', 'Rajasthan', 'Sikkim', 'Tripura', 'Uttarakhand', 'Telangana', 'Bihar',
+             'Kerala', 'Madhya Pradesh', 'Andaman & Nicobar', 'Gujarat', 'Lakshadweep', 'Odisha',
+             'Dadra and Nagar Haveli and Daman and Diu', 'Ladakh', 'Jammu & Kashmir', 'Chhattisgarh', 'Delhi', 'Goa',
+             'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Tamil Nadu', 'Uttar Pradesh', 'West Bengal',
+             'Andhra Pradesh', 'Puduchery', 'Maharashtra']
 
-selected_state = st.selectbox('States', State, index=0)
+    selected_state = st.selectbox('States', State, index=0)
 
-Year = ['None','2018', '2019', '2020', '2021', '2022']
-selected_year = st.selectbox('Year', Year, index=0)
+    Year = ['None','2018', '2019', '2020', '2021', '2022']
+    selected_year = st.selectbox('Year', Year, index=0)
 
-Quarter = ['None','Q1', 'Q2', 'Q3', 'Q4']
-selected_quarter = st.selectbox('Quarter', Quarter, index=0)
-st.write(selected_Type)
+    Quarter = ['None','Q1', 'Q2', 'Q3', 'Q4']
+    selected_quarter = st.selectbox('Quarter', Quarter, index=0)
+    st.write(selected_Type)
 
-if(st.button("PhonePe Transaction State wise")):
-    if(selected_Type== 'Transactions'):
-            Agg_Txn_Cntry_State1=Agg_Txn_Cntry_States1()
-            st.write(selected_state)
-            st.write(selected_year)
-            st.write(selected_quarter)
+    if(st.button("PhonePe Transaction State wise")):
+        if(selected_Type== 'Transactions'):
+                Agg_Txn_Cntry_State1=Agg_Txn_Cntry_States1()
+                st.write(selected_state)
+                st.write(selected_year)
+                st.write(selected_quarter)
+                # Filter the DataFrame based on the selected option
+                if(selected_state ==  'All India' and selected_year == 'None' and selected_quarter ==  'None'):
+                    st.write("All Data-Geo India-State Map")
+                    st.write(Agg_Txn_Cntry_State1)
+                    GeoIndiaMap(Agg_Txn_Cntry_State1)
 
-            # Filter the DataFrame based on the selected option
-            if(selected_state ==  'All India' and selected_year == 'None' and selected_quarter ==  'None'):
-                st.write("All Data-Geo India-State Map")
-                st.write(Agg_Txn_Cntry_State1)
-                GeoIndiaMap(Agg_Txn_Cntry_State1)
+                elif(selected_state ==  'All India' and selected_year != 'None' and selected_quarter !=  'None'):
 
-            elif(selected_state ==  'All India' and selected_year != 'None' and selected_quarter !=  'None'):
-                 st.write("Year-Quarter wise")
-                 no_quarter=str(selected_quarter.strip('Q'))
-                 st.write(no_quarter)
+                     # Create container for the charts
+                     row1_container = st.container()
+                     row2_container = st.container()
 
-                 filter_Agg_Txn_Cntry_State= Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Year'] == selected_year) &
-                                                            (Agg_Txn_Cntry_State1['Quarter'] == no_quarter)]
-                 #st.write(filter_Agg_Txn_Cntry_State)
+                     st.write("Year-Quarter wise")
+                     no_quarter=str(selected_quarter.strip('Q'))
+                     st.write(no_quarter)
 
-
-                 #Transactiontype-Transaction amount - Year - Quarter
-                 Agg_Txn_Cntry_State2=Agg_Txn_Cntry_State2()
-                 filter_Agg_Txn_Cntry_State1 = Agg_Txn_Cntry_State2[(Agg_Txn_Cntry_State2['Year'] == selected_year) &
-                                                                   (Agg_Txn_Cntry_State2['Quarter'] == no_quarter)]
-                 filter_Agg_Txn_Cntry_State1 = filter_Agg_Txn_Cntry_State1.groupby(["Year", "Quarter", "Transaction_type"]).agg({"Transaction_count": "sum"}).reset_index()
-                 #st.write(filter_Agg_Txn_Cntry_State1)
-
-                 GeoIndiaMap(filter_Agg_Txn_Cntry_State)
-                 BarTransaction(filter_Agg_Txn_Cntry_State1)
-
-            elif (selected_state == 'All India' and selected_year == 'None' and selected_quarter != 'None'):
-                st.write("All Data-Geo India-State Map with Quarter")
-                no_quarter = str(selected_quarter.strip('Q'))
-                st.write(no_quarter)
-                filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Quarter'] == no_quarter)]
-
-                st.write(filter_Agg_Txn_Cntry_State)
-                GeoIndiaMap(filter_Agg_Txn_Cntry_State)
-
-            elif (selected_state == 'All India' and selected_year != 'None' and selected_quarter == 'None'):
-                st.write("All Data-Geo India-State Map with Year")
-                # no_quarter = str(selected_quarter.strip('Q'))
-                # st.write(no_quarter)
-                filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Year'] == selected_year)]
-
-                st.write(filter_Agg_Txn_Cntry_State)
-                GeoIndiaMap(filter_Agg_Txn_Cntry_State)
+                     filter_Agg_Txn_Cntry_State= Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Year'] == selected_year) &
+                                                                (Agg_Txn_Cntry_State1['Quarter'] == no_quarter)]
+                     #st.write(filter_Agg_Txn_Cntry_State)
 
 
-            elif(selected_state != 'All India' and selected_year != 'None' and selected_quarter == 'None'):
-                st.write("All Data-Geo India-State Map with State-Year")
-                #no_quarter = str(selected_quarter.strip('Q'))
-                #st.write(no_quarter)
-                filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Year'] == selected_year) &
-                                                                  (Agg_Txn_Cntry_State1['State'] == selected_state)]
+                     #Transactiontype-Transaction amount - Year - Quarter
+                     Agg_Txn_Cntry_State2 = Agg_Txn_Cntry_States2()
+                     filter_Agg_Txn_Cntry_State1 = Agg_Txn_Cntry_State2[(Agg_Txn_Cntry_State2['Year'] == selected_year) &
+                                                                       (Agg_Txn_Cntry_State2['Quarter'] == no_quarter)]
+                     filter_Agg_Txn_Cntry_State1 = filter_Agg_Txn_Cntry_State1.groupby(["Year", "Quarter", "Transaction_type"]).agg({"Transaction_count": "sum"}).reset_index()
+                     #st.write(filter_Agg_Txn_Cntry_State1)
 
-                st.write(filter_Agg_Txn_Cntry_State)
-                GeoIndiaMap(filter_Agg_Txn_Cntry_State)
+                     with row1_container:
+                        GeoIndiaMap(filter_Agg_Txn_Cntry_State)
+                     with row2_container:
+                        BarTransaction(filter_Agg_Txn_Cntry_State1)
 
+                elif (selected_state == 'All India' and selected_year == 'None' and selected_quarter != 'None'):
+                    st.write("All Data-Geo India-State Map with Quarter")
+                    no_quarter = str(selected_quarter.strip('Q'))
+                    st.write(no_quarter)
+                    filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Quarter'] == no_quarter)]
 
-            elif(selected_state != 'All India' and selected_year == 'None' and selected_quarter != 'None'):
-                st.write("All Data-Geo India-State Map with State-Quarter")
-                no_quarter = str(selected_quarter.strip('Q'))
-                st.write(no_quarter)
-                filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Quarter'] == no_quarter) &
-                                                                  (Agg_Txn_Cntry_State1['State'] == selected_state)]
+                    st.write(filter_Agg_Txn_Cntry_State)
+                    GeoIndiaMap(filter_Agg_Txn_Cntry_State)
 
-                st.write(filter_Agg_Txn_Cntry_State)
-                GeoIndiaMap(filter_Agg_Txn_Cntry_State)
+                elif (selected_state == 'All India' and selected_year != 'None' and selected_quarter == 'None'):
+                    st.write("All Data-Geo India-State Map with Year")
+                    # no_quarter = str(selected_quarter.strip('Q'))
+                    # st.write(no_quarter)
+                    filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Year'] == selected_year)]
 
-            elif (selected_state != 'All India' and selected_year == 'None' and selected_quarter == 'None'):
-                st.write("All Data-Geo India-State Map with State")
-                # no_quarter = str(selected_quarter.strip('Q'))
-                # st.write(no_quarter)
-                filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['State'] == selected_state)]
-                st.write(filter_Agg_Txn_Cntry_State)
-                GeoIndiaMap(filter_Agg_Txn_Cntry_State)
-            else:
-                st.write("All Data-Geo India-State Map with State-Year-Quarter")
-                no_quarter = str(selected_quarter.strip('Q'))
-                st.write(no_quarter)
-                filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['State'] == selected_state) &
-                                                                  (Agg_Txn_Cntry_State1['Year'] == selected_year) &
-                                                                  (Agg_Txn_Cntry_State1['Quarter'] == no_quarter)]
-                #st.write(filter_Agg_Txn_Cntry_State)
-
-                Agg_Txn_Cntry_State2 = Agg_Txn_Cntry_State2()
-                filter_Agg_Txn_Cntry_State1 = Agg_Txn_Cntry_State2[(Agg_Txn_Cntry_State2['State'] == selected_state) &
-                                                                   (Agg_Txn_Cntry_State2['Year'] == selected_year) &
-                                                                   (Agg_Txn_Cntry_State2['Quarter'] == no_quarter)]
-
-                filter_Agg_Txn_Cntry_State1 = filter_Agg_Txn_Cntry_State1.groupby(
-                    ["State","Year", "Quarter", "Transaction_type"]).agg({"Transaction_count": "sum"}).reset_index()
-
-                Dict_Txn_cnt=Dict_Txn_cnt()
-
-                filter_Dict_Txn_cnt=Dict_Txn_cnt[(Dict_Txn_cnt['State'] == selected_state) &
-                                                   (Dict_Txn_cnt['Year'] == selected_year) &
-                                                   (Dict_Txn_cnt['Quarter'] == no_quarter)]
-                Pincode_Txn_cnt=Pincode_Txn_cnt()
-
-                filter_Pincode_Txn_cnt = Pincode_Txn_cnt[(Pincode_Txn_cnt['State'] == selected_state) &
-                                                   (Pincode_Txn_cnt['Year'] == selected_year) &
-                                                   (Pincode_Txn_cnt['Quarter'] == no_quarter)]
-
-                GeoIndiaMap(filter_Agg_Txn_Cntry_State)
-                BarTransaction(filter_Agg_Txn_Cntry_State1)
-                PieDistrict(filter_Dict_Txn_cnt)
-                PiePincode(filter_Pincode_Txn_cnt)
-
-    else:
-            st.write(selected_state)
-            st.write(selected_year)
-            st.write(selected_quarter)
-
-            # Filter the DataFrame based on the selected option
-            if (selected_state == 'All India' and selected_year == 'None' and selected_quarter == 'None'):
-                User_Txn_Cntry_State = User_Txn_Cntry_State1()
-                st.write("All Data-Geo India-State Map")
-                st.write(User_Txn_Cntry_State)
-                GeoIndiaMap_User(User_Txn_Cntry_State)
-
-            elif (selected_state == 'All India' and selected_year != 'None' and selected_quarter != 'None'):
-                st.write("All Data-Geo India-State Map with Year and Quarter")
-                no_quarter = str(selected_quarter.strip('Q'))
-                st.write(no_quarter)
-                User_Txn_Cntry_State = User_Txn_Cntry_State1()
-                filter_User_Txn_Cntry_State = User_Txn_Cntry_State[(User_Txn_Cntry_State['Year'] == selected_year) &
-                                                                  (User_Txn_Cntry_State['Quarter'] == no_quarter)]
-
-                filter_User_Txn_Cntry_State_sum= filter_User_Txn_Cntry_State.groupby(['Year','Quarter']).agg({'RegisteredUsers':'sum','appOpens':'sum'}).reset_index()
-
-                st.write(filter_User_Txn_Cntry_State)
-                st.write(filter_User_Txn_Cntry_State_sum)
-
-                GeoIndiaMap_User(filter_User_Txn_Cntry_State)
-                BarTransaction_User(filter_User_Txn_Cntry_State_sum)
-
-            elif(selected_state != 'All India' and selected_year != 'None' and selected_quarter != 'None'):
-
-                st.write("All Data-Geo India-State Map with Year and Quarter")
-                no_quarter = str(selected_quarter.strip('Q'))
-                st.write(no_quarter)
-                User_Txn_Cntry_State = User_Txn_Cntry_State1()
-                filter_User_Txn_Cntry_State = User_Txn_Cntry_State[(User_Txn_Cntry_State['State'] == selected_state) &
-                                                                   (User_Txn_Cntry_State['Year'] == selected_year) &
-                                                                   (User_Txn_Cntry_State['Quarter'] == no_quarter)
-                                                                   ]
-
-                filter_User_Txn_Cntry_State_sum = filter_User_Txn_Cntry_State.groupby(['State','Year', 'Quarter']).agg({'RegisteredUsers': 'sum', 'appOpens': 'sum'}).reset_index()
-
-                Dict_Txn_cnt_User1=Dict_Txn_cnt_User()
-                filter_Dict_Txn_cnt_User = Dict_Txn_cnt_User1[(Dict_Txn_cnt_User1['State'] == selected_state) &
-                                                             (Dict_Txn_cnt_User1['Year'] == selected_year) &
-                                                             (Dict_Txn_cnt_User1['Quarter'] == no_quarter)]
-                Pincode_Txn_cnt_User1=Pincode_Txn_cnt_User()
-                filter_Pincode_Txn_cnt_User = Pincode_Txn_cnt_User1[(Pincode_Txn_cnt_User1['State'] == selected_state) &
-                                                                (Pincode_Txn_cnt_User1['Year'] == selected_year) &
-                                                                (Pincode_Txn_cnt_User1['Quarter'] == no_quarter)]
+                    st.write(filter_Agg_Txn_Cntry_State)
+                    GeoIndiaMap(filter_Agg_Txn_Cntry_State)
 
 
-                # st.write(filter_User_Txn_Cntry_State)
-                # st.write(filter_User_Txn_Cntry_State_sum)
-                # st.write(filter_Dict_Txn_cnt_User)
-                # st.write(filter_Pincode_Txn_cnt_User)
+                elif(selected_state != 'All India' and selected_year != 'None' and selected_quarter == 'None'):
+                    st.write("All Data-Geo India-State Map with State-Year")
+                    #no_quarter = str(selected_quarter.strip('Q'))
+                    #st.write(no_quarter)
+                    filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Year'] == selected_year) &
+                                                                      (Agg_Txn_Cntry_State1['State'] == selected_state)]
 
-                GeoIndiaMap_User(filter_User_Txn_Cntry_State)
-                PieDistrict_User(filter_Dict_Txn_cnt_User)
-                PiePincode_User(filter_Pincode_Txn_cnt_User)
-                
+                    st.write(filter_Agg_Txn_Cntry_State)
+                    GeoIndiaMap(filter_Agg_Txn_Cntry_State)
+
+
+                elif(selected_state != 'All India' and selected_year == 'None' and selected_quarter != 'None'):
+                    st.write("All Data-Geo India-State Map with State-Quarter")
+                    no_quarter = str(selected_quarter.strip('Q'))
+                    st.write(no_quarter)
+                    filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['Quarter'] == no_quarter) &
+                                                                      (Agg_Txn_Cntry_State1['State'] == selected_state)]
+
+                    st.write(filter_Agg_Txn_Cntry_State)
+                    GeoIndiaMap(filter_Agg_Txn_Cntry_State)
+
+                elif (selected_state != 'All India' and selected_year == 'None' and selected_quarter == 'None'):
+                    st.write("All Data-Geo India-State Map with State")
+                    # no_quarter = str(selected_quarter.strip('Q'))
+                    # st.write(no_quarter)
+                    filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['State'] == selected_state)]
+                    st.write(filter_Agg_Txn_Cntry_State)
+                    GeoIndiaMap(filter_Agg_Txn_Cntry_State)
+                else:
+                    st.write("All Data-Geo India-State Map with State-Year-Quarter")
+
+                    # Create container for the charts
+                    row1_container = st.container()
+                    row2_container = st.container()
+
+                    # Create columns for the charts
+                    col1, col2 = st.columns(2)
+                    col3, col4 = st.columns(2)
+
+                    no_quarter = str(selected_quarter.strip('Q'))
+                    st.write(no_quarter)
+                    filter_Agg_Txn_Cntry_State = Agg_Txn_Cntry_State1[(Agg_Txn_Cntry_State1['State'] == selected_state) &
+                                                                      (Agg_Txn_Cntry_State1['Year'] == selected_year) &
+                                                                      (Agg_Txn_Cntry_State1['Quarter'] == no_quarter)]
+                    #st.write(filter_Agg_Txn_Cntry_State)
+
+                    Agg_Txn_Cntry_State2 = Agg_Txn_Cntry_States2()
+                    filter_Agg_Txn_Cntry_State1 = Agg_Txn_Cntry_State2[(Agg_Txn_Cntry_State2['State'] == selected_state) &
+                                                                       (Agg_Txn_Cntry_State2['Year'] == selected_year) &
+                                                                       (Agg_Txn_Cntry_State2['Quarter'] == no_quarter)]
+
+                    filter_Agg_Txn_Cntry_State1 = filter_Agg_Txn_Cntry_State1.groupby(
+                        ["State","Year", "Quarter", "Transaction_type"]).agg({"Transaction_count": "sum"}).reset_index()
+
+                    Dict_Txn_cnt=Dict_Txn_cnts()
+
+                    filter_Dict_Txn_cnt=Dict_Txn_cnt[(Dict_Txn_cnt['State'] == selected_state) &
+                                                       (Dict_Txn_cnt['Year'] == selected_year) &
+                                                       (Dict_Txn_cnt['Quarter'] == no_quarter)]
+                    Pincode_Txn_cnt=Pincode_Txn_cnts()
+
+                    filter_Pincode_Txn_cnt = Pincode_Txn_cnt[(Pincode_Txn_cnt['State'] == selected_state) &
+                                                       (Pincode_Txn_cnt['Year'] == selected_year) &
+                                                       (Pincode_Txn_cnt['Quarter'] == no_quarter)]
+
+
+                    with row1_container:
+                        with col1:
+                            GeoIndiaMap(filter_Agg_Txn_Cntry_State)
+                        with col2:
+                            BarTransaction(filter_Agg_Txn_Cntry_State1)
+                    with row2_container:
+                        with col3:
+                            PieDistrict(filter_Dict_Txn_cnt)
+                        with col4:
+                            PiePincode(filter_Pincode_Txn_cnt)
+
+        else:
+                st.write(selected_state)
+                st.write(selected_year)
+                st.write(selected_quarter)
+
+                # Filter the DataFrame based on the selected option
+                if (selected_state == 'All India' and selected_year == 'None' and selected_quarter == 'None'):
+                    User_Txn_Cntry_State = User_Txn_Cntry_State1()
+                    st.write("All Data-Geo India-State Map")
+                    st.write(User_Txn_Cntry_State)
+                    GeoIndiaMap_User(User_Txn_Cntry_State)
+
+                elif (selected_state == 'All India' and selected_year != 'None' and selected_quarter != 'None'):
+                    st.write("All Data-Geo India-State Map with Year and Quarter")
+                    # Create container for the charts
+                    row1_container = st.container()
+                    row2_container = st.container()
+
+                    no_quarter = str(selected_quarter.strip('Q'))
+                    st.write(no_quarter)
+                    User_Txn_Cntry_State = User_Txn_Cntry_State1()
+                    filter_User_Txn_Cntry_State = User_Txn_Cntry_State[(User_Txn_Cntry_State['Year'] == selected_year) &
+                                                                      (User_Txn_Cntry_State['Quarter'] == no_quarter)]
+
+                    filter_User_Txn_Cntry_State_sum= filter_User_Txn_Cntry_State.groupby(['Year','Quarter']).agg({'RegisteredUsers':'sum','appOpens':'sum'}).reset_index()
+
+                    # st.write(filter_User_Txn_Cntry_State)
+                    # st.write(filter_User_Txn_Cntry_State_sum)
+
+                    with row1_container:
+                        GeoIndiaMap_User(filter_User_Txn_Cntry_State)
+                    with row2_container:
+                        BarTransaction_User(filter_User_Txn_Cntry_State_sum)
+
+                elif(selected_state != 'All India' and selected_year != 'None' and selected_quarter != 'None'):
+                    st.write("All Data-Geo India-State Map with Year and Quarter")
+
+                    # Create container for the charts
+                    row1_container = st.container()
+                    row2_container = st.container()
+
+                    # Create columns for the charts
+                    col1, col2 = st.columns(2)
+
+                    no_quarter = str(selected_quarter.strip('Q'))
+                    st.write(no_quarter)
+                    User_Txn_Cntry_State = User_Txn_Cntry_State1()
+                    filter_User_Txn_Cntry_State = User_Txn_Cntry_State[(User_Txn_Cntry_State['State'] == selected_state) &
+                                                                       (User_Txn_Cntry_State['Year'] == selected_year) &
+                                                                       (User_Txn_Cntry_State['Quarter'] == no_quarter)]
+                                                                       
+    
+                    #filter_User_Txn_Cntry_State_sum = filter_User_Txn_Cntry_State.groupby(['State','Year', 'Quarter']).agg({'RegisteredUsers': 'sum', 'appOpens': 'sum'}).reset_index()
+
+                    Dict_Txn_cnt_User1=Dict_Txn_cnt_User()
+                    filter_Dict_Txn_cnt_User = Dict_Txn_cnt_User1[(Dict_Txn_cnt_User1['State'] == selected_state) &
+                                                                 (Dict_Txn_cnt_User1['Year'] == selected_year) &
+                                                                 (Dict_Txn_cnt_User1['Quarter'] == no_quarter)]
+                    Pincode_Txn_cnt_User1=Pincode_Txn_cnt_User()
+                    filter_Pincode_Txn_cnt_User = Pincode_Txn_cnt_User1[(Pincode_Txn_cnt_User1['State'] == selected_state) &
+                                                                    (Pincode_Txn_cnt_User1['Year'] == selected_year) &
+                                                                    (Pincode_Txn_cnt_User1['Quarter'] == no_quarter)]
+
+
+                    # st.write(filter_User_Txn_Cntry_State)
+                    # st.write(filter_User_Txn_Cntry_State_sum)
+                    # st.write(filter_Dict_Txn_cnt_User)
+                    # st.write(filter_Pincode_Txn_cnt_User)
+
+                    with row1_container:
+                        GeoIndiaMap_User(filter_User_Txn_Cntry_State)
+
+                    with row2_container:
+                        with col1:
+                            PieDistrict_User(filter_Dict_Txn_cnt_User)
+                        with col2:
+                            PiePincode_User(filter_Pincode_Txn_cnt_User)
+
+                    #BarTransaction_User(filter_User_Txn_Cntry_State_sum)
+
+
+if __name__ == '__main__':
+    main()
